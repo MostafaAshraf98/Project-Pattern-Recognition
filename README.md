@@ -5,9 +5,18 @@ with a real world problem.**
 ## Environment
 
 you can download all the packages used using conda or pip
-conda install --file requirements-conda.txt
-or
-pip install -r requirements-pip.txt
+1. This will create new environment from scratch with all listed modules.
+
+    conda env create -f environment.yml
+
+2. If you already have an env and want to install the modules only you can use
+The --prune option removes any packages that are not listed in the environment.yml file.
+
+    conda env update --name <env_name> --file environment.yml --prune
+
+3. Or using pip
+    
+    pip install -r requirements-pip.txt
 
 
 ## Dataset
