@@ -9,6 +9,8 @@ you can download all the packages used using conda or pip
 
     conda env create -f environment.yml
 
+    if this option stuck at solving environment step, you may need to run : conda config --set channel_priority strict
+
 2. If you already have an env and want to install the modules only you can use
 The --prune option removes any packages that are not listed in the environment.yml file.
 
