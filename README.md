@@ -12,7 +12,7 @@ you can download all the packages used using conda or pip
 2. If you already have an env and want to install the modules only you can use
 The --prune option removes any packages that are not listed in the environment.yml file.
 
-    conda env update --name <env_name> --file environment.yml --prune
+    conda env update -f environment.yml
 
 3. Or using pip
     
