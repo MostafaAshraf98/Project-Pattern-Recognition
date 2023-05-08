@@ -2,6 +2,13 @@
 
 **This project aims to put your understanding of machine learning algorithms into practice
 with a real world problem.**
+## Environment
+
+you can download all the packages used using conda or pip
+conda install --file requirements-conda.txt
+or
+pip install -r requirements-pip.txt
+
 
 ## Dataset
 
