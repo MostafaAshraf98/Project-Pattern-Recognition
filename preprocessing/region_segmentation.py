@@ -6,6 +6,9 @@ from scipy import ndimage as ndi
 
 class RegionBasedSegmentation:
     def __init__(self, method="region_growing", **kwargs):
+
+        # method: 'region_growing', 'region_splitting', 'region_merging'
+
         self.method = method
         self.kwargs = kwargs
     

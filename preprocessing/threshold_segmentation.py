@@ -1,4 +1,4 @@
-from skimage.filters import threshold_otsu, threshold_local, threshold_multilevel
+from skimage.filters import threshold_otsu, threshold_local
 from skimage.color import rgb2gray
 import numpy as np
 
@@ -31,8 +31,8 @@ class ThresholdSegmentation:
                 thresh_func = threshold_otsu
             else:
                 thresh_func = threshold_local
-            thresh_vals = threshold_multilevel(image, self.n_thresholds, method=thresh_func)
-            binary = np.digitize(image, thresh_vals)
+            # thresh_vals = threshold_multilevel(image, self.n_thresholds, method=thresh_func)
+            # binary = np.digitize(image, thresh_vals)
         else:
             raise ValueError("Invalid method specified")
         

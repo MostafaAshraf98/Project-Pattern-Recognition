@@ -3,6 +3,7 @@ import numpy as np
 
 class ImagePreprocessor:
     def __init__(self, method="HE"):
+        # method: 'HE', 'AHE', 'CLAHE', 'log'
         self.method = method
     
     def process(self, image):
