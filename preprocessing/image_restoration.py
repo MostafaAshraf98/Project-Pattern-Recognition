@@ -2,6 +2,7 @@ from skimage.filters import median, gaussian, wiener
 from skimage.restoration import denoise_nl_means, wiener
 from skimage.filters import rank
 from skimage.morphology import disk
+from skimage.morphology import square
 from skimage.draw import rectangle
 import numpy as np
 
@@ -38,18 +39,21 @@ class ImageRestorer:
     
     def mean_filter_using_rectangular_disk(self, image, width=3, height=3):
         # Define a rectangular structuring element
-        selem = rectangle(image.shape, shape = (width, height))
-        
+        end = (width, height, 3)
+        selem = rectangle(image.shape, shape = (width, height, 3), end = end)
+
+        print(f'selem = {selem}')    
+
         # Apply the mean filter using the structuring element
         return rank.mean(image, selem)
 
     def mean_filter_using_circular_disk(self, image, radius=3):
         # Define a disk structuring element
         selem = disk(radius)
-        # print(f'selem: {selem}')
-        # print(f'image: {image.shape}')
+        selem = selem[:, np.newaxis]
+       
         # Apply the mean filter using the structuring element
-        return rank.mean(image, selem)
+        return rank.mean(image = image,footprint = selem)
     
     def median_filter(self, image):
         # Median filter
