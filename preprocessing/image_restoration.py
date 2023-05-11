@@ -3,9 +3,13 @@ from skimage.restoration import denoise_nl_means, wiener
 from skimage.filters import rank
 from skimage.morphology import disk
 from skimage.draw import rectangle
+import numpy as np
 
 class ImageRestorer:
     def __init__(self, method="median"):
+
+        # method: 'mean_circular', 'mean_rectangular', 'median', 'gaussian', 'adaptive', 'wiener'
+
         self.method = method
     
     def process(self, image):
@@ -32,17 +36,18 @@ class ImageRestorer:
         
         return image
     
-    def mean_filter_using_rectangular_disk(image, width=3, height=3):
+    def mean_filter_using_rectangular_disk(self, image, width=3, height=3):
         # Define a rectangular structuring element
-        selem = rectangle(image.shape, width=width, height=height)
+        selem = rectangle(image.shape, shape = (width, height))
         
         # Apply the mean filter using the structuring element
         return rank.mean(image, selem)
 
-    def mean_filter_using_circular_disk(image, radius=3):
+    def mean_filter_using_circular_disk(self, image, radius=3):
         # Define a disk structuring element
         selem = disk(radius)
-        
+        # print(f'selem: {selem}')
+        # print(f'image: {image.shape}')
         # Apply the mean filter using the structuring element
         return rank.mean(image, selem)
     

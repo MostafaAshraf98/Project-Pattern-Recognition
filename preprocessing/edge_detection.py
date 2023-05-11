@@ -3,6 +3,10 @@ from skimage.feature import canny
 
 class EdgeDetection:
     def __init__(self, method="sobel"):
+
+        # method: 'sobel', 'prewitt', 'roberts', 'laplace', 'canny'
+        # for roberts and canny: image must be 2D
+
         self.method = method
     
     def sobel(self, image):
