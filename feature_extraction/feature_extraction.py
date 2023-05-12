@@ -75,15 +75,23 @@ class FeatureExtractor:
         sift_features = []
         # if it is a single image
         if(len(images.shape) == 2):
-            k, s = sift.detectAndCompute(images, None)
+            k, s = sift.detectAndCompute(images, mask = None)
             return np.array(s)
         
+        max_length = -1
         for image in images:
-            k, s = sift.detectAndCompute(image, None)
-            keypoints.append(k)
+            _, s = sift.detectAndCompute(image, mask = None)
+            s = s.flatten()
             sift_features.append(s)
-        keypoints = np.array(keypoints)
-        sift_features = np.array(sift_features)
+            if len(s) > max_length:
+                max_length = len(s)
+
+
+        for i in range(len(sift_features)):
+            if len(sift_features[i]) < max_length:
+                sift_features[i] = np.pad(sift_features[i], (0, max_length - sift_features[i].shape[0]), 'constant')
+        # sift_features = np.array(sift_features)
+        # sift_features = sift_features.reshape(sift_features.shape[0], -1)
         return sift_features
     
     def extract_daisy_features(self, images):
