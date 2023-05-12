@@ -9,7 +9,7 @@ from sklearn.ensemble import AdaBoostClassifier
 
 class ModelSelection:
     
-    def __init__(self,x_train, y_train,x_val, y_val):
+    def __init__(self, x_train, y_train, x_val, y_val):
         self.x_train = x_train
         self.y_train = y_train
         self.x_val = x_val
@@ -23,8 +23,9 @@ class ModelSelection:
         # predict the classes of the validation data
         y_pred = knn.predict(self.x_val)
         # calculate and return the accuracy score
-        accuracy_score(self.y_val, y_pred)
-        return knn
+        # accuracy_score(self.y_val, y_pred)
+        # accuracy is done in performance_analysis.py (?)
+        return knn, y_pred
     
     def ANN(self, input_dim, output_dim, hidden_layers=[100]):
         # create sequential model

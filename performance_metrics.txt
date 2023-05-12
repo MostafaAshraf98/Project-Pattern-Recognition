@@ -1,0 +1,54 @@
+========================================
+Timestamp: 2023-05-12 04:19:41.416672
+Model: KNN
+Accuracy: 80.0%
+
+Micro Average Precision: 0.8
+Micro Average Recall: 0.8
+Micro Average F1: 0.8
+
+Macro Average Precision: 0.5
+Macro Average Recall: 0.8
+Macro Average F1: nan
+
+Weighted Macro Average Precision: nan
+Weighted Macro Average Recall: nan
+Weighted Macro Average F1: nan
+========================================
+
+========================================
+Timestamp: 2023-05-12 04:19:46.907340
+Model: KNN
+Accuracy: 80.0%
+
+Micro Average Precision: 0.8
+Micro Average Recall: 0.8
+Micro Average F1: 0.8
+
+Macro Average Precision: 0.5
+Macro Average Recall: 0.8
+Macro Average F1: nan
+
+Weighted Macro Average Precision: nan
+Weighted Macro Average Recall: nan
+Weighted Macro Average F1: nan
+========================================
+
+========================================
+Timestamp: 2023-05-12 04:19:47.803261
+Model: KNN
+Accuracy: 80.0%
+
+Micro Average Precision: 0.8
+Micro Average Recall: 0.8
+Micro Average F1: 0.8
+
+Macro Average Precision: 0.5
+Macro Average Recall: 0.8
+Macro Average F1: nan
+
+Weighted Macro Average Precision: nan
+Weighted Macro Average Recall: nan
+Weighted Macro Average F1: nan
+========================================
+
