@@ -27,7 +27,7 @@ class FeatureSelector:
             else:
                 raise Exception
 
-        except (FileNotFoundError, EOFError, ) as e:
+        except (FileNotFoundError, EOFError) as e:
             print(e)
             print ("Creating new PCA model...")
             pca = PCA(n_components=num_pca_components)
