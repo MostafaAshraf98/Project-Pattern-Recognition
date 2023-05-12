@@ -11,7 +11,7 @@ HEIGHT = 640
 class DataLoader:
     def __init__(self, path: Path):
         self.path = path
-        self.genders = ["men", "women"]
+        self.genders = ["men", "Women"]
         self.desired_size = (WIDTH, HEIGHT)
         
     def load_data(self):
