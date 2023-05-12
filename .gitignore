@@ -1,4 +1,3 @@
 data/
 data.zip
 __pycache__/
-*.npy
