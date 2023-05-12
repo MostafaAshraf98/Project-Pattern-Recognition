@@ -3,6 +3,8 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 from PIL import Image
 
+WIDTH = 224
+
 class DataLoader:
     
     def __init__(self, path: Path):
@@ -27,7 +29,12 @@ class DataLoader:
                 for img_path in digit_path.glob('*.JPG'):
                     try:
                         img = Image.open(img_path)
-                        img = img.resize((224, 224))
+                        img_width = img.size[0]
+                        img_height = img.size[1]
+                        aspect_ratio = img_width / img_height
+                        new_width = WIDTH
+                        new_height = int(new_width / aspect_ratio)
+                        img = img.resize((new_width, new_height), Image.ANTIALIAS)
                         images.append(np.array(img))
                         labels.append(digit)
                     except:
