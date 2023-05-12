@@ -124,15 +124,48 @@ class FeatureExtractor:
         fourier_coeffs = np.array(fourier_coeffs)
         return fourier_coeffs
     
-    def extract_orb_features(image, features=1000):
-        # Create an ORB object with specified parameters
-        orb = cv2.ORB_create(nfeatures=features, scaleFactor=1.2, nlevels=8)
+    def extract_orb_features(self, images, features=100):
+        # print(f'images shape: {images.shape}')
+        
+        descriptors = []
+        max_length = -1
+        if (len(images.shape) == 4):
+            #Array of images
+            for i in range(images.shape[0]):
+                image = images[i]
+                # Create an ORB object with specified parameters
+                orb = cv2.ORB_create(nfeatures=features, scaleFactor=1.2, nlevels=8)
 
-        # Detect keypoints in the image
-        keypoints = orb.detect(image, None)
+                # Detect keypoints in the image
+                keypoints = orb.detect(image, None)
 
-        # Compute descriptors for the keypoints
-        keypoints, descriptors = orb.compute(image, keypoints)
+                # Compute descriptors for the keypoints
+                keypoints, descriptor = orb.compute(image, keypoints)
+                descriptor = descriptor.flatten()
+
+                descriptors.append(descriptor)
+
+                if len(descriptor) > max_length:
+                    max_length = len(descriptor)
+
+            for i in range(len(descriptors)):
+                if len(descriptors[i]) < max_length:
+                    descriptors[i] = np.pad(descriptors[i], (0, max_length - descriptors[i].shape[0]), 'constant')
+                
+
+
+        else:
+            #Single image
+            # print('Single image')
+            # Create an ORB object with specified parameters
+            orb = cv2.ORB_create(nfeatures=features, scaleFactor=1.2, nlevels=8)
+
+            # Detect keypoints in the image
+            keypoints = orb.detect(images, None)
+
+            # Compute descriptors for the keypoints
+            keypoints, descriptors = orb.compute(images, keypoints)
+            descriptors = descriptors.flatten()
 
         # Return the descriptors as a numpy array
         return np.array(descriptors)
