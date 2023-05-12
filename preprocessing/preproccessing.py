@@ -30,6 +30,8 @@ class ImagePreprocessor:
         return exposure.equalize_adapthist(image, clip_limit=0.03)
     
     def _apply_logarithmic_transformation(self, image):
-        image = filters.rank.maximum(image, np.ones((3, 3)))
-        image = filters.rank.minimum(image, np.ones((3, 3)))
-        return np.log(image+1)
+        image = image.astype(np.float32) / 255.0  # Convert image to float and scale to [0, 1]
+        log_img = np.log10(1 + image)  # Apply log transform to each channel
+        log_img = (log_img / np.max(log_img)) * 255.0  # Scale log-transformed image back to [0, 255]
+        log_img = log_img.astype(np.uint8)  # Convert back to uint8 format
+        return log_img

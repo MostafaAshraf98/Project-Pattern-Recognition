@@ -1,5 +1,7 @@
 from skimage.filters import sobel, prewitt, roberts, laplace, gaussian
 from skimage.feature import canny
+from skimage.color import rgb2gray
+
 
 class EdgeDetection:
     def __init__(self, method="sobel"):
@@ -16,13 +18,13 @@ class EdgeDetection:
         return prewitt(image)
     
     def roberts(self, image):
-        return roberts(image)
+        return roberts(rgb2gray(image))
     
     def laplace(self, image):
         return laplace(image)
     
     def canny(self, image, sigma=1.0, low_threshold=None, high_threshold=None, mask=None):
-        return canny(image, sigma=sigma, low_threshold=low_threshold, high_threshold=high_threshold, mask=mask)
+        return canny(rgb2gray(image), sigma=sigma, low_threshold=low_threshold, high_threshold=high_threshold, mask=mask)
     
     def process(self, image):
         if self.method == "sobel":

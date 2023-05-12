@@ -28,9 +28,9 @@ class RegionBasedSegmentation:
             return segmented
         elif self.method == "region_splitting":
             # Region Splitting segmentation
-            min_size = self.kwargs.get('min_size', 50)
-            max_size = self.kwargs.get('max_size', 1000)
-            segmented = felzenszwalb(image, scale=100, sigma=0.5, min_size=min_size, max_size=max_size)
+            # min_size = self.kwargs.get('min_size', 50)
+            # max_size = self.kwargs.get('max_size', 1000)
+            segmented = felzenszwalb(image, scale=70, sigma=0.5)
             return segmented
         elif self.method == "region_merging":
             # Region Merging segmentation

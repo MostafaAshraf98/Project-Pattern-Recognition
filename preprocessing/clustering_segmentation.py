@@ -43,7 +43,7 @@ class ClusteringSegmentation:
 
         # cluster the superpixels based on their color features
         if self.method == 'kmeans':
-            kmeans = KMeans(n_clusters=self.n_clusters).fit(features.reshape(-1, 1))
+            kmeans = KMeans(n_clusters=self.n_clusters, n_init =10).fit(features.reshape(-1, 1))
             labels = kmeans.labels_
 
         elif self.method == 'fcm':
