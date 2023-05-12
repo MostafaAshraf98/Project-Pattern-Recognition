@@ -2,6 +2,8 @@ from skimage.feature import hog, local_binary_pattern
 import cv2
 import numpy as np
 from skimage.color import rgb2gray
+from skimage.feature import daisy
+
 """
 # Example usage:
 fe = FeatureExtractor()
@@ -68,6 +70,11 @@ class FeatureExtractor:
         sift = cv2.SIFT_create(nfeatures=sift_num_features)
         keypoints = []
         sift_features = []
+        # if it is a single image
+        if(len(images.shape) == 2):
+            k, s = sift.detectAndCompute(images, None)
+            return np.array(s)
+        
         for image in images:
             k, s = sift.detectAndCompute(image, None)
             keypoints.append(k)
@@ -75,6 +82,20 @@ class FeatureExtractor:
         keypoints = np.array(keypoints)
         sift_features = np.array(sift_features)
         return sift_features
+    
+    def extract_daisy_features(self, images):
+        descs_features = []
+        
+        if len(images.shape) == 2:
+            descs = daisy(images, step=180, radius=58, rings=2, histograms=6, orientations=8, visualize=False)
+            return descs
+        
+        for image in images:
+            descs = daisy(image, step=180, radius=58, rings=2, histograms=6, orientations=8, visualize=False)
+            descs_features.append(descs)
+        descs_features = np.array(descs_features)
+        return descs
+    
 
     def extract_fourier_descriptor_features(self, images, num_coeffs=20):
         print(f'image shape: {images[0].shape}')
