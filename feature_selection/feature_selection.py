@@ -19,17 +19,12 @@ class FeatureSelector:
             image_vectors.append(image.flatten())
         image_vectors = np.array(image_vectors)
         
-        try:
-            if load:
-                pca = pickle.load(open("pca.pkl", "rb"))
-                pca_features = pca.transform(image_vectors)
-                return pca_features
-            else:
-                raise Exception
-
-        except (FileNotFoundError, EOFError) as e:
-            print(e)
-            print ("Creating new PCA model...")
+        if load:
+            pca = pickle.load(open("pca.pkl", "rb"))
+            pca_features = pca.transform(image_vectors)
+            return pca_features
+        else:
+            print("Creating new PCA model...")
             pca = PCA(n_components=num_pca_components)
             pca.fit(image_vectors)
 
