@@ -13,8 +13,15 @@ class DataLoader:
         self.path = path
         self.genders = ["men", "women"]
         self.desired_size = (WIDTH, HEIGHT)
-
+        
     def load_data(self):
+        try:
+            return self.load_saved_data()
+        except:
+            return self.start_load_data()
+
+
+    def start_load_data(self):
         images = []
         labels = []
         x_train = []
@@ -95,13 +102,12 @@ class DataLoader:
         np.save("./data/y_val.npy", y_val)
 
     def load_saved_data(self):
-        try:
-            x_train = np.load("./data/x_train.npy")
-            y_train = np.load("./data/y_train.npy")
-            x_test = np.load("./data/x_test.npy")
-            y_test = np.load("./data/y_test.npy")
-            x_val = np.load("./data/x_val.npy")
-            y_val = np.load("./data/y_val.npy")
-            return x_train, y_train, x_test, y_test, x_val, y_val
-        except:
-            print("No saved data found")
+        x_train = np.load("./data/x_train.npy")
+        y_train = np.load("./data/y_train.npy")
+        x_test = np.load("./data/x_test.npy")
+        y_test = np.load("./data/y_test.npy")
+        x_val = np.load("./data/x_val.npy")
+        y_val = np.load("./data/y_val.npy")
+    
+        return x_train, y_train, x_test, y_test, x_val, y_val
+    
