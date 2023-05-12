@@ -34,6 +34,7 @@ class FeatureExtractor:
 
     def extract_hog_features(self, images, hog_orientations=9, hog_pixels_per_cell=(8, 8), hog_cells_per_block=(2, 2)):
         if(len(images.shape) == 3):
+            #Array of images
             hog_features = []
             for i in range(images.shape[0]):
                 hog_features.append(hog(images[i], 
@@ -42,6 +43,7 @@ class FeatureExtractor:
                                 cells_per_block=hog_cells_per_block,
                                 channel_axis = None))
         else:
+            #Single image
             hog_features = hog( images, 
                                 orientations=hog_orientations,
                                 pixels_per_cell=hog_pixels_per_cell,
@@ -50,9 +52,16 @@ class FeatureExtractor:
         return np.array(hog_features)
 
     def extract_lbp_features(self, images,lbp_num_points=8, lbp_radius=1):
-        lbp_features = local_binary_pattern(images, lbp_num_points, lbp_radius)
-        lbp_features = lbp_features.reshape(lbp_features.shape[0], -1)
-        return lbp_features
+        if(len(images.shape) == 3):
+            lbp_features = []
+            for i in range(images.shape[0]):
+                feature = local_binary_pattern(images[i], lbp_num_points, lbp_radius)
+                feature = feature.flatten()
+                lbp_features.append(feature)
+        else:
+            lbp_features = local_binary_pattern(images, lbp_num_points, lbp_radius)
+            lbp_features = lbp_features.flatten()
+        return np.array(lbp_features)
 
     def extract_sift_features(self, images, sift_num_features=128):
         sift = cv2.SIFT_create(sift_num_features)
