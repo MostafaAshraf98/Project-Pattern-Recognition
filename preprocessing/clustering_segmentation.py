@@ -1,5 +1,5 @@
 from skimage.color import rgb2gray
-from skimage.filters import threshold_otsu
+from skimage.filters import threshold_otsu, gaussian
 from skimage.segmentation import slic
 from skimage.segmentation import mark_boundaries
 from skimage.util import img_as_float
@@ -7,9 +7,12 @@ from skimage.transform import resize
 from skimage.measure import regionprops
 from skimage.color import label2rgb
 from sklearn.cluster import KMeans
-from skimage import io
+from skimage.morphology import closing, disk, skeletonize
+from skimage.util import invert
+from skimage.segmentation import clear_border
+from skfuzzy.cluster import cmeans
 import numpy as np
-import matplotlib.pyplot as plt
+
 
 class ClusteringSegmentation:
         
@@ -24,7 +27,6 @@ class ClusteringSegmentation:
 
     def process(self, image):
         # convert the image to grayscale
-        gray_image = rgb2gray(image)
 
         # apply SLIC algorithm to get superpixels
         scaled_image = img_as_float(resize(image, (500, 500)))
@@ -35,7 +37,6 @@ class ClusteringSegmentation:
         features = []
         for i in np.unique(segments):
             mask = segments == i    
-            # feature = np.mean(gray_image[mask])
             feature = np.mean(scaled_image[mask])
             features.append(feature)
         features = np.array(features)
@@ -44,9 +45,28 @@ class ClusteringSegmentation:
         if self.method == 'kmeans':
             kmeans = KMeans(n_clusters=self.n_clusters).fit(features.reshape(-1, 1))
             labels = kmeans.labels_
+
         elif self.method == 'fcm':
-            from skimage.segmentation import fuzzy_cmeans
-            centers, labels = fuzzy_cmeans(features.reshape(-1, 1), self.n_clusters, m=2, error=0.005, maxiter=100, init=None)
+            gray_image = rgb2gray(image)
+
+            # Apply a threshold to the image
+            thresh = threshold_otsu(gray_image)
+            binary = gray_image > thresh
+
+            # Apply morphological operations to clean up the image
+            binary = closing(binary, disk(2))
+            binary = clear_border(binary)
+
+            # Obtain a skeleton of the binary image
+            skeleton = skeletonize(binary)
+
+            # Apply fuzzy logic to the skeleton
+            fuzzy_skeleton = gaussian(skeleton, sigma=2)
+            data = fuzzy_skeleton.reshape(-1, 1)
+            cntr, u, u0, d, jm, p, fpc = cmeans(data.T, 2, 2, error=0.005, maxiter=1000)
+            fuzzy_labels = np.argmax(u, axis=0).reshape(image.shape[:2])
+            return fuzzy_labels
+            
 
         # create an image with each superpixel labeled by its cluster
         labels = np.array(labels, dtype=np.float64)
