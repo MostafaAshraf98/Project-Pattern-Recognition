@@ -1,9 +1,13 @@
-from skimage.filters import median, gaussian, wiener
+from scipy.signal import convolve2d
+from skimage.filters import median, gaussian
 from skimage.restoration import denoise_nl_means, wiener
 from skimage.filters import rank
 from skimage.morphology import disk
 from skimage.morphology import square
 from skimage.draw import rectangle
+from scipy.ndimage import convolve
+from skimage.color import rgb2gray
+
 import numpy as np
 
 class ImageRestorer:
@@ -38,14 +42,10 @@ class ImageRestorer:
         return image
     
     def mean_filter_using_rectangular_disk(self, image, width=3, height=3):
-        # Define a rectangular structuring element
-        end = (width, height, 3)
-        selem = rectangle(image.shape, shape = (width, height, 3), end = end)
+        kernel = np.ones((height, width, 3)) / (height * width)
+        filtered_image = convolve(image, kernel)
+        return filtered_image
 
-        print(f'selem = {selem}')    
-
-        # Apply the mean filter using the structuring element
-        return rank.mean(image, selem)
 
     def mean_filter_using_circular_disk(self, image, radius=3):
         # Define a disk structuring element
@@ -61,14 +61,19 @@ class ImageRestorer:
     
     def gaussian_filter(self, image):
         # Gaussian filter
-        return gaussian(image, sigma=1, mode='reflect', cval=0, multichannel=None, preserve_range=False, truncate=4.0)
+        return gaussian(image, sigma=1, mode='reflect', cval=0, multichannel=True, preserve_range=False, truncate=4.0)
     
     def adaptive_filter(self, image):
         # Adaptive filter
         return denoise_nl_means(image, h=0.8 * 1.0, fast_mode=True, patch_size=5, patch_distance=3, 
-                                multichannel=True, preserve_range=False, sigma=None)
+                                multichannel=True, preserve_range=False)
     
     def wiener_filter(self, image):
         # Wiener filter
-        return wiener(image, 1, noise=None, mask=None, 
-                      psf=None, balance=0.1, clip=True, preserve_range=False)
+        image = rgb2gray(image)
+        psf = np.ones((5, 5)) / 25
+        img = convolve2d(image, psf, 'same')
+        rng = np.random.default_rng()
+        img += 0.1 * img.std() * rng.standard_normal(image.shape)
+        deconvolved_img = wiener(image, psf, 0.1)
+        return deconvolved_img
