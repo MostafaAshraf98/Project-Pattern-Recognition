@@ -32,16 +32,19 @@ class FeatureExtractor:
     def __init__(self):
         pass
 
-    def extract_hog_features(self, images, hog_orientations=9, hog_pixels_per_cell=(8, 8), hog_cells_per_block=(2, 2)):
+    def extract_hog_features(self, images, hog_orientations=8, 
+                             hog_pixels_per_cell=(16, 16), 
+                             hog_cells_per_block=(1, 1)):
         if(len(images.shape) == 3):
             #Array of images
             hog_features = []
             for i in range(images.shape[0]):
-                hog_features.append(hog(images[i], 
+                hog_feature = hog(images[i], 
                                 orientations=hog_orientations,
                                 pixels_per_cell=hog_pixels_per_cell,
                                 cells_per_block=hog_cells_per_block,
-                                channel_axis = None))
+                                channel_axis = None)
+                hog_features.append(hog_feature)
         else:
             #Single image
             hog_features = hog( images, 
@@ -50,7 +53,7 @@ class FeatureExtractor:
                                 cells_per_block=hog_cells_per_block,
                                 channel_axis = None)
         return np.array(hog_features)
-
+    
     def extract_lbp_features(self, images,lbp_num_points=8, lbp_radius=1):
         if(len(images.shape) == 3):
             lbp_features = []
