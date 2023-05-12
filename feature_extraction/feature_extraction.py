@@ -2,7 +2,7 @@ from skimage.feature import hog, local_binary_pattern
 from sklearn.decomposition import PCA
 import cv2
 import numpy as np
-
+from skimage.color import rgb2gray
 """
 # Example usage:
 fe = FeatureExtractor()
@@ -54,19 +54,21 @@ class FeatureExtractor:
         return lbp_features
 
     def extract_sift_features(self, images):
-        sift = cv2.xfeatures2d.SIFT_create(128)
+        # sift = cv2.xfeatures2d.SIFT_create(128)
+        sift = cv2.SIFT_create(128)
         gray_images = [cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) for image in images]
         keypoints, sift_features = sift.detectAndComputeMulti(gray_images, None)
         return sift_features
 
     def extract_surf_features(self, images):
         surf = cv2.xfeatures2d.SURF_create(64)
-        gray_images = [cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) for image in images]
+        gray_images = [cv2.cvtColor(image, cv2.COLOR_RGB2GRAY) for image in images]
         keypoints, surf_features = surf.detectAndComputeMulti(gray_images, None)
         return surf_features
 
     def extract_fourier_descriptor_features(self, images, num_coeffs=20):
-        gray_images = [cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) for image in images]
+        print(f'image shape: {images[0].shape}')
+        gray_images = [cv2.cvtColor(image, cv2.COLOR_RGB2GRAY) for image in images]
         contours = [max(cv2.findContours(gray_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)[0], key=cv2.contourArea)
                     for gray_image in gray_images]
         contour_complexes = [np.empty(contour.shape[:-1], dtype=complex) for contour in contours]
