@@ -98,14 +98,19 @@ class FeatureExtractor:
         descs_features = []
         
         if len(images.shape) == 2:
-            descs = daisy(images, step=180, radius=58, rings=2, histograms=6, orientations=8, visualize=False)
+            #Single Image
+            descs = daisy(images, step=180, radius=58, rings=2, 
+                          histograms=6, orientations=8, visualize=False)
+            descs = descs.flatten()
             return descs
         
         for image in images:
-            descs = daisy(image, step=180, radius=58, rings=2, histograms=6, orientations=8, visualize=False)
+            descs = daisy(image, step=180, radius=58, rings=2, 
+                          histograms=6, orientations=8, visualize=False)
+            descs = descs.flatten()
             descs_features.append(descs)
         descs_features = np.array(descs_features)
-        return descs
+        return descs_features
     
 
     def extract_fourier_descriptor_features(self, images, num_coeffs=20):
