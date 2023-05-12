@@ -1,0 +1,23 @@
+from sklearn.decomposition import PCA
+import numpy as np
+
+class FeatureSelector:
+    
+    def __init__(self, num_pca_components = 20) -> None:
+        self.num_pca_components = num_pca_components
+        
+    def extract_pca_features(self, images):
+        """
+        The extract_pca_features function takes as input a NumPy array of images and an optional parameter num_components that specifies the number of principal components to use as features (default is 20).
+        For each image, the function flattens the image into a 1D vector and appends it to a list of image vectors. 
+        It then converts the list of image vectors to a NumPy array and performs PCA using scikit-learn's PCA function. 
+        Finally, the function extracts the first num_components principal components and returns them as the PCA features.
+        """
+        image_vectors = []
+        for image in images:
+            image_vectors.append(image.flatten())
+        image_vectors = np.array(image_vectors)
+        pca = PCA(n_components=self.num_pca_components)
+        pca.fit(image_vectors)
+        pca_features = pca.transform(image_vectors)
+        return pca_features
