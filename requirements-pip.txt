@@ -2,3 +2,12 @@ gdown==4.6.6
 numpy
 torch
 torchvision
+matplotlib
+scikit-image
+scikit-learn
+Pillow
+Keras
+hmmlearn
+scikit-fuzzy
+opencv-pyhton==3.4.2.16
+opencv-contrib-python==3.4.2.16
