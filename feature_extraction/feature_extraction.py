@@ -108,12 +108,53 @@ class FeatureExtractor:
         descs_features = []
         
         for image in images:
+            # descs = daisy(  image, 
+            #                 step=180,
+            #                 radius=58,
+            #                 rings=2, 
+            #                 histograms=6,
+            #                 orientations=8,
+            #                 visualize=False)
+
+            # A smaller value of step would result in a higher density of 
+            # computation and a larger number of descriptors,
+            # while a larger value of step would result in a lower density of
+            # computation and a smaller number of descriptors
+
+            # radius: This parameter represents the radius (in pixels) of the outermost
+            # ring of the daisy grid. A larger value of radius would result in a larger area
+            # of the image being covered by the descriptors, while a smaller value of radius
+            # would result in a smaller area being covered.
+
+            # rings: This parameter represents the number of rings in the daisy grid. 
+            # A larger value of rings would result in a larger number of descriptors being computed, 
+            # while a smaller value of rings would result in a smaller number of descriptors.
+
+            # histograms: This parameter represents the number of histograms per ring. 
+            # A larger value of histograms would result in a finer quantization of the gradient orientations, 
+            # while a smaller value of histograms would result in a coarser quantization.
+
+            # orientations: This parameter represents the number of orientations per histogram. 
+            # A larger value of orientations would result in a finer quantization of the gradient orientations, 
+            # while a smaller value of orientations would result in a coarser quantization.
+
+            # visualize: This parameter specifies whether to return a visualization of the daisy descriptors. 
+            # If set to True, the function would return both the descriptors and a visualization of the daisy 
+            # grid overlaid on the input image.
+
+            # For example, you could try increasing the radius and/or rings parameters to 
+            # cover a larger area of the image and capture more local features. 
+            # Alternatively, you could try increasing the histograms and/or orientations parameters 
+            # to capture more detailed information about the gradient orientations. 
+            # However, keep in mind that increasing these parameters would also increase the 
+            # computational cost of the function.
+
             descs = daisy(  image, 
                             step=180,
                             radius=58,
                             rings=2, 
-                            histograms=6,
-                            orientations=8,
+                            histograms=8,
+                            orientations=16,
                             visualize=False)
             descs = descs.flatten()
             descs_features.append(descs)
