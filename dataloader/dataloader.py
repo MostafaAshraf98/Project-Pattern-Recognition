@@ -4,7 +4,6 @@ import numpy as np
 from PIL import Image
 from PIL import ImageOps
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tqdm import tqdm
 
 WIDTH = 320
 HEIGHT = 320
@@ -16,14 +15,14 @@ class DataLoader:
         self.genders = ["men", "Women"]
         self.desired_size = (WIDTH, HEIGHT)
         
-    def load_data(self):
+    def load_data(self, data_augmentation=False):
         try:
             return self.load_saved_data()
         except:
-            return self.start_load_data()
+            return self.start_load_data(data_augmentation)
 
 
-    def start_load_data(self):
+    def start_load_data(self, data_augmentation=False):
         images = []
         labels = []
         x_train = []
@@ -38,7 +37,7 @@ class DataLoader:
                 digit_path = self.path / gender / str(digit)
                 images = []
                 labels = []
-                for img_path in tqdm(digit_path.glob("*.JPG")):
+                for img_path in digit_path.glob("*.JPG"):
                     try:
                         img = Image.open(img_path)
 
@@ -91,8 +90,9 @@ class DataLoader:
         x_val = np.array(x_val)
         y_val = np.array(y_val)
 
-        x_train, y_train = self.data_augmentation(x_train, y_train)
-
+        if (data_augmentation):
+            x_train, y_train = self.data_augmentation(x_train, y_train)
+        y_train = np.reshape(y_train, (y_train.shape[0], 1))
         self.save_data(x_train, y_train, x_test, y_test, x_val, y_val)
 
         return x_train, y_train, x_test, y_test, x_val, y_val
