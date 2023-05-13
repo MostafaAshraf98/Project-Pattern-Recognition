@@ -288,3 +288,28 @@ class FeatureExtractor:
         y = np.interp(t, arc_length, contour[:, 1])
 
         return np.column_stack((x, y))
+
+    def extract_efds_features(self, images):
+        # Load an image and extract a contour
+        coeffs = []
+        for image in images:    
+            binary_image = cv2.adaptiveThreshold(image, maxValue=255, 
+                                                 adaptiveMethod=cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                                thresholdType=cv2.THRESH_BINARY_INV,
+                                                    blockSize=11, C=2)
+            contour,_ = cv2.findContours(binary_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            
+            contour = contour[0]
+            print(contour)
+            # print(np.all(binary_image == 0))
+            # plt.imshow(binary_image)
+            # plt.show()
+            # Compute the EFDs for the contour
+            num_coeff = 20
+            x = contour[:, 0, 0]
+            y = contour[:, 0, 1]
+            coeff = elliptic_fourier_descriptors(np.column_stack((x, y)), order=num_coeff, normalize=True)
+            coeffs.append(coeff.flatten())
+        return np.array(coeffs)
+        
+

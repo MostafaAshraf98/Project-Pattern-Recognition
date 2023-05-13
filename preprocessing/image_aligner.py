@@ -8,8 +8,8 @@ class ImageAligner:
         pass
 
     def align_image(self, binary_images):
+        
         aligned_images = []
-
         for image in binary_images:
             # Apply Canny edge detection to the image
             edges = cv2.Canny(image, 20, 100)
@@ -54,7 +54,9 @@ class ImageAligner:
                 if (pixels_up > pixels_down):
                     aligned_image = np.rot90(aligned_image, 2)            
             
-            aligned_images.append(aligned_image)
+                aligned_images.append(aligned_image)
+            else:
+                aligned_images.append(image)
     
         return np.array(aligned_images)
         
