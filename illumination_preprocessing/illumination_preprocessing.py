@@ -66,7 +66,7 @@ class IlluminationPreprocessing:
       saturation_channel_masked = cv2.multiply(saturation_channel, mask)
       # plt.imshow(saturation_channel_masked, cmap="gray")
       # plt.show()
-      return saturation_channel_masked
+      return saturation_channel_masked, mask
 
 
   def process_images_multiprocess(self, images):

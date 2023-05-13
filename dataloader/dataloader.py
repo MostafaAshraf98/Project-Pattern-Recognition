@@ -3,9 +3,11 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 from PIL import Image
 from PIL import ImageOps
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tqdm import tqdm
 
-WIDTH = 640
-HEIGHT = 640
+WIDTH = 320
+HEIGHT = 320
 
 
 class DataLoader:
@@ -36,7 +38,7 @@ class DataLoader:
                 digit_path = self.path / gender / str(digit)
                 images = []
                 labels = []
-                for img_path in digit_path.glob("*.JPG"):
+                for img_path in tqdm(digit_path.glob("*.JPG")):
                     try:
                         img = Image.open(img_path)
 
@@ -70,10 +72,10 @@ class DataLoader:
                         continue
 
                 x_train_temp, x_test_temp, y_train_temp, y_test_temp = train_test_split(
-                    images, labels, test_size=0.15, random_state=42
+                    images, labels, test_size=0.1, random_state=42
                 )
                 x_train_temp, x_val_temp, y_train_temp, y_val_temp = train_test_split(
-                    x_train_temp, y_train_temp, test_size=0.15 / 0.85, random_state=42
+                    x_train_temp, y_train_temp, test_size=0.1 / 0.9, random_state=42
                 )
                 x_train.extend(x_train_temp)
                 y_train.extend(y_train_temp)
@@ -88,6 +90,8 @@ class DataLoader:
         y_test = np.array(y_test)
         x_val = np.array(x_val)
         y_val = np.array(y_val)
+
+        x_train, y_train = self.data_augmentation(x_train, y_train)
 
         self.save_data(x_train, y_train, x_test, y_test, x_val, y_val)
 
@@ -111,3 +115,48 @@ class DataLoader:
     
         return x_train, y_train, x_test, y_test, x_val, y_val
     
+    def data_augmentation(self, x_train, y_train):
+        #--------------------------------------DATA AUGMENTATION-----------------------------------------
+
+        # Define image data generator for data augmentation
+        datagen = ImageDataGenerator(
+            rotation_range=40,  # randomly rotate images by up to 40 degrees
+            width_shift_range=0.3,  # randomly shift images horizontally by up to 30%
+            height_shift_range=0.3,  # randomly shift images vertically by up to 30%
+            shear_range=0.2,  # randomly apply shearing transformations
+            zoom_range=0.3,  # randomly zoom in on images by up to 30%
+            channel_shift_range=20,  # randomly adjust brightness
+            brightness_range=[0.5, 1.5],  # randomly adjust brightness
+            horizontal_flip=True,  # randomly flip images horizontally
+            vertical_flip=True,  # randomly flip images vertically
+            fill_mode='nearest'  # fill in any gaps with the nearest pixel value
+        )
+
+        # Fit the data generator to your training data
+        datagen.fit(x_train)
+
+        # Define a function to generate augmented images and labels
+
+        # Set batch size for training
+        batch_size = 300
+
+        # Generate augmented images and labels using the function defined above
+        augmented_data = self.generate_augmented_data(x_train, y_train, batch_size, datagen)
+        x_augmented, y_augmented = next(augmented_data)
+
+        # Concatenate the original training set and the augmented images
+        x_train = np.concatenate((x_train, x_augmented))
+
+        # Concatenate the original labels and the augmented labels
+        y_train = np.concatenate((y_train, y_augmented))
+        y_train = np.reshape(y_train,(y_train.shape[0],1))
+
+        return x_train, y_train
+
+    
+    
+    def generate_augmented_data(self, x, y, batch_size, datagen):
+        gen = datagen.flow(x, y, batch_size=batch_size)
+        while True:
+            x_batch, y_batch = gen.next()
+            yield x_batch, y_batch

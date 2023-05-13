@@ -7,7 +7,7 @@ class FeatureSelector:
     def __init__(self) -> None:
         pass
 
-    def extract_pca_features(self, images, load=False, num_pca_components=20):
+    def extract_pca_features(self, images, load=False, num_pca_components=0.95):
         """
         The extract_pca_features function takes as input a NumPy array of images and an optional parameter num_components that specifies the number of principal components to use as features (default is 20).
         For each image, the function flattens the image into a 1D vector and appends it to a list of image vectors.
@@ -25,7 +25,7 @@ class FeatureSelector:
             return pca_features
         else:
             print("Creating new PCA model...")
-            pca = PCA(n_components=num_pca_components)
+            pca = PCA(n_components = num_pca_components, svd_solver = 'full')
             pca.fit(image_vectors)
 
             pca_features = pca.transform(image_vectors)

@@ -4,8 +4,10 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.utils import to_categorical
 import hmmlearn.hmm as hmm
 from sklearn.ensemble import AdaBoostClassifier
+from keras import regularizers
 import pickle
 
 
@@ -33,40 +35,64 @@ class ModelSelection:
 
         return knn, pred_train, pred_val
 
-    def ANN(self, input_dim, output_dim, hidden_layers=[100]):
+    def ANN(self, input_dim, output_dim, hidden_layers=[500, 400]):
+
+        print(f'input_dim: {input_dim}')
+        print(f'output_dim: {output_dim}')
+        print(f'x_train: {self.x_train.shape}')
+        print(f'y_train: {self.y_train.shape}')
+
+
         # create sequential model
         model = Sequential()
         
         # add input layer
-        model.add(Dense(hidden_layers[0], activation="relu", input_dim=input_dim))
-        
+        model.add(Dense(hidden_layers[0], activation="relu", input_dim=input_dim,
+                        kernel_regularizer=regularizers.l2(0.01)))
+
+
+
         # add hidden layers
         for units in hidden_layers[1:]:
             model.add(Dense(units, activation="relu"))
             
         # add output layer
         model.add(Dense(output_dim, activation="softmax"))
+
+        y_onehot_train = to_categorical(self.y_train, num_classes=6)
+        y_onehot_val = to_categorical(self.y_val, num_classes=6)
+        print(f'y_onehot: {y_onehot_train.shape}')
         
         # compile the model
         model.compile(
             loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"]
         )
         
+        # model.summary()
+        # print(f'Output shape: {model.output_shape}')
+
+
         # train the model using the training data
         model.fit(
             self.x_train,
-            self.y_train,
+            y_onehot_train,
             epochs=10,
             batch_size=32,
-            validation_data=(self.x_val, self.y_val),
+            validation_data=(self.x_val, y_onehot_val),
         )
 
         # Predict the classes of the training data
         pred_train = model.predict(self.x_train)
+        pred_train = pred_train.argmax(axis=1)
 
         # Predict the classes of the validation data
         pred_val = model.predict(self.x_val)
+        pred_val = pred_val.argmax(axis=1)
 
+        # Evaluate the model on the test data
+        loss, test_accuracy = model.evaluate(self.x_val, y_onehot_val, verbose=0)
+        print(f"Test accuracy: {test_accuracy}")
+        print(f"Test loss: {loss}")
         self.save_model(model, "ann.pkl")
 
         return model, pred_train, pred_val

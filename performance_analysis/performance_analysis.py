@@ -61,32 +61,32 @@ class PerformanceAnalysis:
             f.write(f'Timestamp: {str(datetime.datetime.now())}\n')
             f.write(f'Model: {self.modelName}\n')
             f.write(f'Accuracy: {np.round(self.accuracy * 100, 2)}%\n\n')
-            f.write(f'Micro Average Precision: {str(self.micro_avg_precision)}\n')
-            f.write(f'Micro Average Recall: {str(self.micro_avg_recall)}\n')
-            f.write(f'Micro Average F1: {str(np.round(self.micro_avg_f1,2))}\n\n')
-            f.write(f'Macro Average Precision: {str(self.macro_avg_precision)}\n')
-            f.write(f'Macro Average Recall: {str(self.macro_avg_recall)}\n')
-            f.write(f'Macro Average F1: {str(self.macro_avg_f1)}\n\n')
-            f.write(f'Weighted Macro Average Precision: {str(self.weighted_macro_avg_precision)}\n')
-            f.write(f'Weighted Macro Average Recall: {str(self.weighted_macro_avg_recall)}\n')
-            f.write(f'Weighted Macro Average F1: {str(self.weighted_macro_avg_f1)}\n')
+            # f.write(f'Micro Average Precision: {str(self.micro_avg_precision)}\n')
+            # f.write(f'Micro Average Recall: {str(self.micro_avg_recall)}\n')
+            # f.write(f'Micro Average F1: {str(np.round(self.micro_avg_f1,2))}\n\n')
+            # f.write(f'Macro Average Precision: {str(self.macro_avg_precision)}\n')
+            # f.write(f'Macro Average Recall: {str(self.macro_avg_recall)}\n')
+            # f.write(f'Macro Average F1: {str(self.macro_avg_f1)}\n\n')
+            # f.write(f'Weighted Macro Average Precision: {str(self.weighted_macro_avg_precision)}\n')
+            # f.write(f'Weighted Macro Average Recall: {str(self.weighted_macro_avg_recall)}\n')
+            # f.write(f'Weighted Macro Average F1: {str(self.weighted_macro_avg_f1)}\n')
             f.write('========================================\n\n')
         
         # Print them to the console
         print('========================================')
-        print(f'Timestamp: {str(datetime.datetime.now())}')
+        # print(f'Timestamp: {str(datetime.datetime.now())}')
         print(f'Model: {self.modelName}')
-        print(f'Accuracy: {np.round(self.accuracy * 100, 2)}%\n')
-        print(f'Micro Average Precision: {str(self.micro_avg_precision)}')
-        print(f'Micro Average Recall: {str(self.micro_avg_recall)}')
-        print(f'Micro Average F1: {str(np.round(self.micro_avg_f1,2))}\n')
-        print(f'Macro Average Precision: {str(self.macro_avg_precision)}')
-        print(f'Macro Average Recall: {str(self.macro_avg_recall)}')
-        print(f'Macro Average F1: {str(self.macro_avg_f1)}\n')
-        print(f'Weighted Macro Average Precision: {str(self.weighted_macro_avg_precision)}')
-        print(f'Weighted Macro Average Recall: {str(self.weighted_macro_avg_recall)}')
-        print(f'Weighted Macro Average F1: {str(self.weighted_macro_avg_f1)}')
-        print('========================================\n\n')
+        print(f'Accuracy: {np.round(self.accuracy * 100, 2)}%')
+        # print(f'Micro Average Precision: {str(self.micro_avg_precision)}')
+        # print(f'Micro Average Recall: {str(self.micro_avg_recall)}')
+        # print(f'Micro Average F1: {str(np.round(self.micro_avg_f1,2))}\n')
+        # print(f'Macro Average Precision: {str(self.macro_avg_precision)}')
+        # print(f'Macro Average Recall: {str(self.macro_avg_recall)}')
+        # print(f'Macro Average F1: {str(self.macro_avg_f1)}\n')
+        # print(f'Weighted Macro Average Precision: {str(self.weighted_macro_avg_precision)}')
+        # print(f'Weighted Macro Average Recall: {str(self.weighted_macro_avg_recall)}')
+        # print(f'Weighted Macro Average F1: {str(self.weighted_macro_avg_f1)}')
+        print('========================================\n')
 
 
         
@@ -108,22 +108,22 @@ class PerformanceAnalysis:
         self.avg_FN = np.mean(self.false_negatives)
     
         self.__accuracy()
-        self.__micro_avg_precision()
-        self.__micro_avg_recall()
-        self.__micro_avg_f1()
-        self.__macro_avg_precision()
-        self.__macro_avg_recall()
-        self.__macro_avg_f1()
-        self.__weighted_macro_avg_precision()
-        self.__weighted_macro_avg_recall()
-        self.__weighted_macro_avg_f1()
+        # self.__micro_avg_precision()
+        # self.__micro_avg_recall()
+        # self.__micro_avg_f1()
+        # self.__macro_avg_precision()
+        # self.__macro_avg_recall()
+        # self.__macro_avg_f1()
+        # self.__weighted_macro_avg_precision()
+        # self.__weighted_macro_avg_recall()
+        # self.__weighted_macro_avg_f1()
     
 
 
 
 
     def __accuracy(self):
-        self.accuracy = np.sum(self.predictions == self.true_labels) / len(self.true_labels)
+        self.accuracy = np.sum(self.predictions == self.true_labels.flatten()) / len(self.true_labels.flatten())
         return self.accuracy
 
 
