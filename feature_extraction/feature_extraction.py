@@ -5,6 +5,8 @@ from skimage.color import rgb2gray
 from skimage.feature import daisy
 import matplotlib.pyplot as plt
 from scipy.fftpack import fft
+from pyefd import elliptic_fourier_descriptors
+
 
 """
 # Example usage:
@@ -207,8 +209,7 @@ class FeatureExtractor:
         res = np.array(hu_moments_list)
         return res
     
-    def extract_convex_hull_features(self, images, max_length_train):
-        max_length = -1
+    def extract_convex_hull_features(self, images, max_length_train=-1):
         features = []
         for image in images:
             # Find contours in the image
@@ -218,18 +219,18 @@ class FeatureExtractor:
             if len(contours) > 0:
                 largest_contour = max(contours, key=cv2.contourArea)
                 hull = cv2.convexHull(largest_contour)
-                if (len(hull.flatten()) > max_length):
-                    max_length = len(hull.flatten())
+                if (len(hull.flatten()) > max_length_train):
+                    max_length_train = len(hull.flatten())
                 features.append(hull.flatten())
             else:
                 # If there are no contours, append an array of zeros to the feature list
                 features.append(np.zeros(2))
 
         for i in range(len(features)):
-            if len(features[i]) < max_length:
-                features[i] = np.pad(features[i], (0, max_length - features[i].shape[0]), 'constant')
+            if len(features[i]) < max_length_train:
+                features[i] = np.pad(features[i], (0, max_length_train - features[i].shape[0]), 'constant')
 
-        return np.array(features), max_length
+        return np.array(features), max_length_train
 
     def elliptical_fourier_descriptors(self, imgs):
 
@@ -240,10 +241,10 @@ class FeatureExtractor:
         n_samples = 200
 
         # Define the indices of the Fourier coefficients to keep.
-        coeffs_to_keep = range(1, n_coeffs + 1)
+        coeffs_to_keep = range(1, 2*n_coeffs + 1)
 
         # Define the output array.
-        efds = np.zeros((len(imgs), n_coeffs * 4))
+        efds = np.zeros((len(imgs), (n_coeffs * 4) - 1))
 
         for i, img in enumerate(imgs):
             # Find the contour of the image.
@@ -258,12 +259,18 @@ class FeatureExtractor:
 
             # Take the first n_coeffs coefficients.
             fourier_coeffs = fourier_coeffs[coeffs_to_keep]
-
+            # print(coeffs_to_keep)
+            # print(fourier_coeffs.shape)
             # Calculate the elliptical Fourier descriptors.
             a0 = np.real(fourier_coeffs[0]) / n_samples
             b_coeffs = -np.imag(fourier_coeffs[1:]) / n_samples
             a_coeffs = np.real(fourier_coeffs[1:]) / n_samples
-            efds[i] = np.concatenate(([a0], np.ravel(a_coeffs), np.ravel(b_coeffs)))
+            # print(a0.shape, a_coeffs.shape, b_coeffs.shape)
+            efds_list = [a0]
+            efds_list.extend(np.ravel(a_coeffs))
+            efds_list.extend(np.ravel(b_coeffs))
+            # print(len(efds_list))
+            efds[i] = np.array(efds_list)
 
         return efds
     

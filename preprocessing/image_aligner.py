@@ -50,7 +50,7 @@ class ImageAligner:
                 pixels_down = np.sum(np.sum(aligned_image, axis = 1)[-70:])
                 # plt.imshow(aligned_image, cmap='gray')
                 # plt.show()
-                print(pixels_up, pixels_down)
+                # print(pixels_up, pixels_down)
                 if (pixels_up > pixels_down):
                     aligned_image = np.rot90(aligned_image, 2)            
             
