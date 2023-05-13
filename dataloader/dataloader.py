@@ -89,10 +89,23 @@ class DataLoader:
         y_test = np.array(y_test)
         x_val = np.array(x_val)
         y_val = np.array(y_val)
+        
+        # shuffle the training data
+        indices = np.arange(x_train.shape[0])
+        np.random.shuffle(indices)
+        x_train = x_train[indices]
+        y_train = y_train[indices]
+
+        # shuffle the validation data
+        indices = np.arange(x_val.shape[0])
+        np.random.shuffle(indices)
+        x_val = x_val[indices]
+        y_val = y_val[indices]
 
         if (data_augmentation):
             x_train, y_train = self.data_augmentation(x_train, y_train)
-        y_train = np.reshape(y_train, (y_train.shape[0], 1))
+            y_train = np.reshape(y_train, (y_train.shape[0], 1))
+            
         self.save_data(x_train, y_train, x_test, y_test, x_val, y_val)
 
         return x_train, y_train, x_test, y_test, x_val, y_val
@@ -120,7 +133,7 @@ class DataLoader:
 
         # Define image data generator for data augmentation
         datagen = ImageDataGenerator(
-            rotation_range=40,  # randomly rotate images by up to 40 degrees
+            # rotation_range=40,  # randomly rotate images by up to 40 degrees
             width_shift_range=0.3,  # randomly shift images horizontally by up to 30%
             height_shift_range=0.3,  # randomly shift images vertically by up to 30%
             shear_range=0.2,  # randomly apply shearing transformations
