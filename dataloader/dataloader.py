@@ -55,23 +55,23 @@ class DataLoader:
                 
                 images = self.resize_images(images)
 
-                x_train_temp, x_test_temp, y_train_temp, y_test_temp = train_test_split(
-                    images, labels, test_size=0.1, random_state=42
-                )
                 x_train_temp, x_val_temp, y_train_temp, y_val_temp = train_test_split(
-                    x_train_temp, y_train_temp, test_size=0.1 / 0.9, random_state=42
+                    images, labels, test_size=0.2, random_state=42
                 )
+                # x_train_temp, x_val_temp, y_train_temp, y_val_temp = train_test_split(
+                #     x_train_temp, y_train_temp, test_size=0.1 / 0.9, random_state=42
+                # )
                 x_train.extend(x_train_temp)
                 y_train.extend(y_train_temp)
-                x_test.extend(x_test_temp)
-                y_test.extend(y_test_temp)
+                # x_test.extend(x_test_temp)
                 x_val.extend(x_val_temp)
                 y_val.extend(y_val_temp)
+                # y_test.extend(y_test_temp)
 
         x_train = np.array(x_train)
         y_train = np.array(y_train)
-        x_test = np.array(x_test)
-        y_test = np.array(y_test)
+        # x_test = np.array(x_test)
+        # y_test = np.array(y_test)
         x_val = np.array(x_val)
         y_val = np.array(y_val)
         
