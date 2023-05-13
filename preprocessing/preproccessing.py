@@ -1,10 +1,17 @@
 from skimage import exposure, filters
 import numpy as np
+from PIL import ImageOps , Image
+
+
+WIDTH = 640
+HEIGHT = 640
 
 class ImagePreprocessor:
     def __init__(self, method="HE"):
         # method: 'HE', 'AHE', 'CLAHE', 'log'
         self.method = method
+        self.desired_size = (WIDTH, HEIGHT)
+        
     
     def process(self, image):
         if self.method == "HE":
@@ -35,3 +42,5 @@ class ImagePreprocessor:
         log_img = (log_img / np.max(log_img)) * 255.0  # Scale log-transformed image back to [0, 255]
         log_img = log_img.astype(np.uint8)  # Convert back to uint8 format
         return log_img
+    
+        
