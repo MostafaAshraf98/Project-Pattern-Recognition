@@ -1,11 +1,15 @@
 import datetime
 import numpy as np
+import colorama
+from colorama import Fore, Back, Style
+
 
 class PerformanceAnalysis:
-    def __init__(self, modelName, predictions, true_labels):
+    def __init__(self, modelName, predictions, true_labels, validation=False):
         self.modelName = modelName
         self.predictions = predictions
         self.true_labels = true_labels
+        self.validation = validation
 
         # Weights
         self.weights = np.zeros(6)
@@ -73,21 +77,39 @@ class PerformanceAnalysis:
             f.write('========================================\n\n')
         
         # Print them to the console
-        print('========================================')
-        # print(f'Timestamp: {str(datetime.datetime.now())}')
-        print(f'Model: {self.modelName}')
-        print(f'Accuracy: {np.round(self.accuracy * 100, 2)}%')
-        # print(f'Micro Average Precision: {str(self.micro_avg_precision)}')
-        # print(f'Micro Average Recall: {str(self.micro_avg_recall)}')
-        # print(f'Micro Average F1: {str(np.round(self.micro_avg_f1,2))}\n')
-        # print(f'Macro Average Precision: {str(self.macro_avg_precision)}')
-        # print(f'Macro Average Recall: {str(self.macro_avg_recall)}')
-        # print(f'Macro Average F1: {str(self.macro_avg_f1)}\n')
-        # print(f'Weighted Macro Average Precision: {str(self.weighted_macro_avg_precision)}')
-        # print(f'Weighted Macro Average Recall: {str(self.weighted_macro_avg_recall)}')
-        # print(f'Weighted Macro Average F1: {str(self.weighted_macro_avg_f1)}')
-        print('========================================\n')
+        if (not self.validation):
+            print('========================================')
+            # print(f'Timestamp: {str(datetime.datetime.now())}')
+            print(f'Model: {self.modelName}')
+            print(f'Accuracy: {np.round(self.accuracy * 100, 2)}%')
+            # print(f'Micro Average Precision: {str(self.micro_avg_precision)}')
+            # print(f'Micro Average Recall: {str(self.micro_avg_recall)}')
+            # print(f'Micro Average F1: {str(np.round(self.micro_avg_f1,2))}\n')
+            # print(f'Macro Average Precision: {str(self.macro_avg_precision)}')
+            # print(f'Macro Average Recall: {str(self.macro_avg_recall)}')
+            # print(f'Macro Average F1: {str(self.macro_avg_f1)}\n')
+            # print(f'Weighted Macro Average Precision: {str(self.weighted_macro_avg_precision)}')
+            # print(f'Weighted Macro Average Recall: {str(self.weighted_macro_avg_recall)}')
+            # print(f'Weighted Macro Average F1: {str(self.weighted_macro_avg_f1)}')
+            print('========================================\n')
 
+        else:
+            print(Fore.RED)            
+            print('*****************************************')
+            # print(f'Timestamp: {str(datetime.datetime.now())}')
+            print(f'Model: {self.modelName}')
+            print(f'Accuracy: {np.round(self.accuracy * 100, 2)}%')
+            # print(f'Micro Average Precision: {str(self.micro_avg_precision)}')
+            # print(f'Micro Average Recall: {str(self.micro_avg_recall)}')
+            # print(f'Micro Average F1: {str(np.round(self.micro_avg_f1,2))}\n')
+            # print(f'Macro Average Precision: {str(self.macro_avg_precision)}')
+            # print(f'Macro Average Recall: {str(self.macro_avg_recall)}')
+            # print(f'Macro Average F1: {str(self.macro_avg_f1)}\n')
+            # print(f'Weighted Macro Average Precision: {str(self.weighted_macro_avg_precision)}')
+            # print(f'Weighted Macro Average Recall: {str(self.weighted_macro_avg_recall)}')
+            # print(f'Weighted Macro Average F1: {str(self.weighted_macro_avg_f1)}')
+            print('*****************************************\n')
+            print(Style.RESET_ALL + 'This text has default colors.')
 
         
   

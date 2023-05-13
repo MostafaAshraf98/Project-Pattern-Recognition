@@ -24,16 +24,16 @@ class EdgeDetection:
         return laplace(image)
     
     def canny(self, images, sigma=1.0, low_threshold=None, high_threshold=None, mask=None):
-        if (len(images.shape) == 4):
+        if (len(images.shape) == 3):
             # Array of images
             edge_detected_imgs = np.zeros((images.shape[0], images.shape[1], images.shape[2]))
             for i in range(images.shape[0]):
-                edge_detected_imgs[i] = canny(rgb2gray(images[i]), 
+                edge_detected_imgs[i] = canny(images[i], 
                                               sigma=sigma, low_threshold=low_threshold, 
                                               high_threshold=high_threshold, mask=mask)
             return edge_detected_imgs
         else:
-            return canny(rgb2gray(images), 
+            return canny(images, 
                          sigma=sigma, 
                          low_threshold=low_threshold, 
                          high_threshold=high_threshold, mask=mask)

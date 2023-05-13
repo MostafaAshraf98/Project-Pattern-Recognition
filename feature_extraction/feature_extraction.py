@@ -34,11 +34,15 @@ pca_features = fe.extract_pca_features(images)
 
 class FeatureExtractor:
     def __init__(self):
-        pass
+        self.sift_max_length = -1
+        
+
 
     def extract_hog_features(self, images, hog_orientations=8, 
-                             hog_pixels_per_cell=(8, 8), 
-                             hog_cells_per_block=(2, 2)):
+                             hog_pixels_per_cell=(32, 16), 
+                             hog_cells_per_block=(2, 1)):
+        # Increasing size of hog_pixels_per_cell decreases size of o/p features
+        # Increasing size of hog_cells_per_block increases size of o/p features
         #Array of images
         hog_features = []
         for i in range(images.shape[0]):
@@ -59,30 +63,43 @@ class FeatureExtractor:
             lbp_features.append(feature)
         return np.array(lbp_features)
 
-    def extract_sift_features(self, images, sift_num_features=128):
-        sift = cv2.SIFT_create(nfeatures=sift_num_features)
+    def extract_sift_features(self, _images, sift_num_features=128):
+        # sift = cv2.xfeatures2d.SIFT_create()
+        images = np.copy(_images)
+        images = images.astype(np.uint8)
+        sift = cv2.SIFT_create(nfeatures=sift_num_features, nOctaveLayers=5)
         keypoints = []
         sift_features = []
         
-        max_length = -1
-        for image in images:
-            _, s = sift.detectAndCompute(image, mask = None)
-            
+        failed_images = []
+        train_flag = False
+        if (self.sift_max_length == -1):
+            train_flag = True
+        for i in range(images.shape[0]):
+            # print(images[i].shape)
+            # plt.imshow(images[i])
+            # plt.show()
+            keypoints, s = sift.detectAndCompute(images[i], mask = None)
+            # print(i, type(s), end = ' ')
             if (s is None):
-                print(i)
-                print(image.shape)
-                plt.imshow(image)
-                plt.show()
+                print('None')
+                print('Keypoints: ', keypoints)
+                failed_images.append(i)
+                sift_features.append(np.zeros((0,0)))
+                continue
+            print(s.shape)
             s = s.flatten()
             sift_features.append(s)
-            if len(s) > max_length:
-                max_length = len(s)
+            if (train_flag and len(s) > self.sift_max_length):
+                self.sift_max_length = len(s)
 
-
+        # Padding
         for i in range(len(sift_features)):
-            if len(sift_features[i]) < max_length:
-                sift_features[i] = np.pad(sift_features[i], (0, max_length - sift_features[i].shape[0]), 'constant')
-
+            if sift_features[i].shape[0] == 0:
+                sift_features[i] = np.zeros(self.sift_max_length)
+            elif sift_features[i].shape[0] < self.sift_max_length:
+                sift_features[i] = np.pad(sift_features[i], (0, self.sift_max_length - sift_features[i].shape[0]), 'constant')
+        sift_features = np.array(sift_features)
         return sift_features
     
     def extract_daisy_features(self, images):
