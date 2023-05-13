@@ -192,7 +192,7 @@ class FeatureExtractor:
             contours  = cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
             # Select the largest contour
-            contour = max(contours, key=cv2.contourArea)
+            contour = max(contours[0], key=cv2.contourArea)
 
             # Calculate Hu moments
             moments = cv2.moments(contour)
