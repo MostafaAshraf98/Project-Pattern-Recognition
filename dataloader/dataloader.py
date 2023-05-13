@@ -52,8 +52,11 @@ class DataLoader:
                         continue
 
                 images = np.array(images)
-                images, _ = self.illumination_processing.process_images_loops(images)
-                images = self.resize_images(images)
+                illuminated_list = self.illumination_processing.process_images_loops(images)
+                illuminated_imgs = [t[0] for t in illuminated_list]
+                illuminated_mask = [t[1] for t in illuminated_list]
+                illuminated_imgs = np.array(illuminated_imgs)
+                images = self.resize_images(illuminated_imgs)
 
                 x_train_temp, x_test_temp, y_train_temp, y_test_temp = train_test_split(
                     images, labels, test_size=0.1, random_state=42
@@ -163,34 +166,36 @@ class DataLoader:
         images_resized = []
         for img in images:
             img = self.custom_resize_img(img)
-            images_resized.append(np.array(img))
+            images_resized.append(img)
         
+        images_resized = np.array(images_resized)
         return images_resized
             
             
             
     def custom_resize_img(self,img):
         # Calculate the aspect ratio of the image
-        img_width = img .shape[0]
-        img_height = img.shape[1]
+        img = Image.fromarray(img)
+        img_width, img_height   = img.size
         aspect_ratio = float(img_width) / float(img_height)
 
         # resize the image so that the shortest side is equal to the desired size
         if img_width < img_height:
             new_width = int(self.desired_size[0] * aspect_ratio)
-            img = np.array(Image.fromarray(img).resize((new_width, self.desired_size[1])))
+            img = img.resize((new_width, self.desired_size[1]))
         else:
             new_height = int(self.desired_size[1] / aspect_ratio)
-            img = np.array(Image.fromarray(img).resize((self.desired_size[0], new_height)))
+            img = img.resize((self.desired_size[0], new_height))
 
         # add padding to the image so that it is the desired size
-        delta_width = self.desired_size[0] - img.shape[0]
-        delta_height = self.desired_size[1] - img.shape[1]
+        delta_width = self.desired_size[0] - img.size[0]
+        delta_height = self.desired_size[1] - img.size[1]
         left = int(delta_width / 2)
         top = int(delta_height / 2)
-        right = self.desired_size[0] - img.shape[0] - left
-        bottom = self.desired_size[1] - img.shape[1] - top
+        right = self.desired_size[0] - img.size[0] - left
+        bottom = self.desired_size[1] - img.size[1] - top
         img = ImageOps.expand(
-            Image.fromarray(img), border=(left, top, right, bottom), fill=255
+            img, border=(left, top, right, bottom), fill=(255,255,255)
         )
+        img = np.array(img)
         return img

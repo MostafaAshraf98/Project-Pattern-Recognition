@@ -2,15 +2,10 @@ from skimage import exposure, filters
 import numpy as np
 from PIL import ImageOps , Image
 
-
-WIDTH = 640
-HEIGHT = 640
-
 class ImagePreprocessor:
     def __init__(self, method="HE"):
         # method: 'HE', 'AHE', 'CLAHE', 'log'
         self.method = method
-        self.desired_size = (WIDTH, HEIGHT)
         
     
     def process(self, image):
