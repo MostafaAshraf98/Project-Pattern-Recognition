@@ -109,7 +109,7 @@ class PerformanceAnalysis:
             # print(f'Weighted Macro Average Recall: {str(self.weighted_macro_avg_recall)}')
             # print(f'Weighted Macro Average F1: {str(self.weighted_macro_avg_f1)}')
             print('*****************************************\n')
-            print(Style.RESET_ALL + 'This text has default colors.')
+            print(Style.RESET_ALL)
 
         
   

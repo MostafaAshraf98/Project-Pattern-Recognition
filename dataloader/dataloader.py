@@ -52,11 +52,8 @@ class DataLoader:
                         continue
 
                 images = np.array(images)
-                illuminated_list = self.illumination_processing.process_images_loops(images)
-                illuminated_imgs = [t[0] for t in illuminated_list]
-                illuminated_mask = [t[1] for t in illuminated_list]
-                illuminated_imgs = np.array(illuminated_imgs)
-                images = self.resize_images(illuminated_imgs)
+                
+                images = self.resize_images(images)
 
                 x_train_temp, x_test_temp, y_train_temp, y_test_temp = train_test_split(
                     images, labels, test_size=0.1, random_state=42

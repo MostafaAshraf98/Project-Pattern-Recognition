@@ -55,10 +55,10 @@ class FeatureExtractor:
 
         return np.array(hog_features)
     
-    def extract_lbp_features(self, images,lbp_num_points=8, lbp_radius=1):
+    def extract_lbp_features(self, images, lbp_num_points=8, lbp_radius=1):
         lbp_features = []
-        for i in range(images.shape[0]):
-            feature = local_binary_pattern(images[i], lbp_num_points, lbp_radius)
+        for image in images:
+            feature = local_binary_pattern(image, lbp_num_points, lbp_radius)
             feature = feature.flatten()
             lbp_features.append(feature)
         return np.array(lbp_features)
@@ -82,12 +82,12 @@ class FeatureExtractor:
             keypoints, s = sift.detectAndCompute(images[i], mask = None)
             # print(i, type(s), end = ' ')
             if (s is None):
-                print('None')
-                print('Keypoints: ', keypoints)
+                # print('None')
+                # print('Keypoints: ', keypoints)
                 failed_images.append(i)
                 sift_features.append(np.zeros((0,0)))
                 continue
-            print(s.shape)
+            # print(s.shape)
             s = s.flatten()
             sift_features.append(s)
             if (train_flag and len(s) > self.sift_max_length):
@@ -173,10 +173,10 @@ class FeatureExtractor:
             hog_feat = hog.compute(grad_mag, winStride=(cell_size[1], cell_size[0]))
 
             # Compute CLBP features
-            clbp_feat  = self.extract_lbp_features(image,radius=radius, n_points=neighbors)
+            clbp_feat  = self.extract_lbp_features(np.array([image]), lbp_radius=radius, lbp_num_points=neighbors)[0]
             
             # Concatenate HOG and CLBP features
-            features = np.concatenate(hog_feat, clbp_feat)
+            features = np.concatenate((hog_feat, clbp_feat))
             descriptors.append(features.flatten())
 
         descriptors = np.array(descriptors)
@@ -281,10 +281,3 @@ class FeatureExtractor:
         y = np.interp(t, arc_length, contour[:, 1])
 
         return np.column_stack((x, y))
-
-    def extract_lbp_features(self,image, radius=1, n_points=8):
-        lbp = local_binary_pattern(image, n_points, radius, method='uniform')
-        hist, _ = np.histogram(lbp.ravel(), bins=np.arange(0, n_points + 3), range=(0, n_points + 2))
-        hist = hist.astype("float")
-        hist /= (hist.sum() + 1e-7)
-        return np.array(hist)
