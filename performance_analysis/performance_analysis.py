@@ -60,20 +60,20 @@ class PerformanceAnalysis:
         self.__confusion_matrix()
         
         # Write them to a file
-        with open('performance_metrics.txt', 'a') as f:
+        with open('performance_metrics.txt', 'w') as f:
             f.write('========================================\n')
             f.write(f'Timestamp: {str(datetime.datetime.now())}\n')
             f.write(f'Model: {self.modelName}\n')
             f.write(f'Accuracy: {np.round(self.accuracy * 100, 2)}%\n\n')
-            # f.write(f'Micro Average Precision: {str(self.micro_avg_precision)}\n')
-            # f.write(f'Micro Average Recall: {str(self.micro_avg_recall)}\n')
-            # f.write(f'Micro Average F1: {str(np.round(self.micro_avg_f1,2))}\n\n')
-            # f.write(f'Macro Average Precision: {str(self.macro_avg_precision)}\n')
-            # f.write(f'Macro Average Recall: {str(self.macro_avg_recall)}\n')
-            # f.write(f'Macro Average F1: {str(self.macro_avg_f1)}\n\n')
-            # f.write(f'Weighted Macro Average Precision: {str(self.weighted_macro_avg_precision)}\n')
-            # f.write(f'Weighted Macro Average Recall: {str(self.weighted_macro_avg_recall)}\n')
-            # f.write(f'Weighted Macro Average F1: {str(self.weighted_macro_avg_f1)}\n')
+            f.write(f'Micro Average Precision: {str(self.micro_avg_precision)}\n')
+            f.write(f'Micro Average Recall: {str(self.micro_avg_recall)}\n')
+            f.write(f'Micro Average F1: {str(np.round(self.micro_avg_f1,2))}\n\n')
+            f.write(f'Macro Average Precision: {str(self.macro_avg_precision)}\n')
+            f.write(f'Macro Average Recall: {str(self.macro_avg_recall)}\n')
+            f.write(f'Macro Average F1: {str(self.macro_avg_f1)}\n\n')
+            f.write(f'Weighted Macro Average Precision: {str(self.weighted_macro_avg_precision)}\n')
+            f.write(f'Weighted Macro Average Recall: {str(self.weighted_macro_avg_recall)}\n')
+            f.write(f'Weighted Macro Average F1: {str(self.weighted_macro_avg_f1)}\n')
             f.write('========================================\n\n')
         
         # Print them to the console
@@ -130,15 +130,15 @@ class PerformanceAnalysis:
         self.avg_FN = np.mean(self.false_negatives)
     
         self.__accuracy()
-        # self.__micro_avg_precision()
-        # self.__micro_avg_recall()
-        # self.__micro_avg_f1()
-        # self.__macro_avg_precision()
-        # self.__macro_avg_recall()
-        # self.__macro_avg_f1()
-        # self.__weighted_macro_avg_precision()
-        # self.__weighted_macro_avg_recall()
-        # self.__weighted_macro_avg_f1()
+        self.__micro_avg_precision()
+        self.__micro_avg_recall()
+        self.__micro_avg_f1()
+        self.__macro_avg_precision()
+        self.__macro_avg_recall()
+        self.__macro_avg_f1()
+        self.__weighted_macro_avg_precision()
+        self.__weighted_macro_avg_recall()
+        self.__weighted_macro_avg_f1()
     
 
 
@@ -163,7 +163,7 @@ class PerformanceAnalysis:
         return self.micro_avg_recall
     
     def __micro_avg_f1(self):
-        self.micro_avg_f1 = 2 * (self.micro_avg_precision_ * self.micro_avg_recall_) / (self.micro_avg_precision_ + self.micro_avg_recall_)
+        self.micro_avg_f1 = 2 * (self.micro_avg_precision * self.micro_avg_recall) / (self.micro_avg_precision + self.micro_avg_recall)
         return self.micro_avg_f1
         
     
@@ -171,37 +171,29 @@ class PerformanceAnalysis:
 
     def __macro_avg_precision(self):
         temp_arr = self.true_positives / (self.true_positives + self.false_positives)
-        temp_arr = temp_arr[~np.isnan(temp_arr)]
         self.macro_avg_precision = np.mean(temp_arr)
         return self.macro_avg_precision
 
     def __macro_avg_recall(self):
         temp_arr = self.true_positives / (self.true_positives + self.false_negatives)
-        temp_arr = temp_arr[~np.isnan(temp_arr)]
-        self.macro_avg_recall_ = np.mean(temp_arr)
-        return self.macro_avg_recall_
+        self.macro_avg_recall = np.mean(temp_arr)
+        return self.macro_avg_recall
 
     def __macro_avg_f1(self):
         precisions = self.true_positives / (self.true_positives + self.false_negatives)
         recalls = self.true_positives / (self.true_positives + self.false_positives)
-        self.macro_avg_f1_ = np.mean(2 * (precisions * recalls) / (precisions + recalls))
-        return self.macro_avg_f1_
+        self.macro_avg_f1 = np.mean(2 * (precisions * recalls) / (precisions + recalls))
+        return self.macro_avg_f1
     
     #========================================WEIGHTED MACRO AVERAGE========================================
 
     def __weighted_macro_avg_precision(self):
-        if (self.confusion_matrix_computed == False):
-            self.__confusion_matrix()
-        else:
-            self.weighted_macro_avg_precision = np.sum(self.weights * (self.true_positives / (self.true_positives + self.false_positives)))
-            return self.weighted_macro_avg_precision
+        self.weighted_macro_avg_precision = np.sum(self.weights * (self.true_positives / (self.true_positives + self.false_positives)))
+        return self.weighted_macro_avg_precision
         
     def __weighted_macro_avg_recall(self):
-        if (self.confusion_matrix_computed == False):
-            self.__confusion_matrix()
-        else:
-            self.weighted_macro_avg_recall = np.sum(self.weights * (self.true_positives / (self.true_positives + self.false_negatives)))
-            return self.weighted_macro_avg_recall
+        self.weighted_macro_avg_recall = np.sum(self.weights * (self.true_positives / (self.true_positives + self.false_negatives)))
+        return self.weighted_macro_avg_recall
         
     def __weighted_macro_avg_f1(self):
         precisions = self.true_positives / (self.true_positives + self.false_negatives)
