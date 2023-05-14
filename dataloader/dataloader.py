@@ -6,6 +6,8 @@ from PIL import ImageOps
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from illumination_preprocessing.illumination_preprocessing import IlluminationPreprocessing
 import tqdm
+import os
+import cv2
 
 WIDTH = 320
 HEIGHT = 320
@@ -196,3 +198,20 @@ class DataLoader:
         )
         img = np.array(img)
         return img
+    
+    def load_test_data(self):
+        files = [f for f in os.listdir(self.path) if os.path.isfile(os.path.join(self.path, f))]
+
+        # Sort the list of files in increasing order
+        files.sort(key=lambda x: int(os.path.splitext(x)[0]))
+
+        # Initialize an empty numpy array to store the images
+        images = np.empty((len(files),), dtype=object)
+
+        # Loop over all the image files, read each image using cv2.imread and store it in the numpy array
+        for i, filename in enumerate(files):
+            img = cv2.imread(os.path.join(self.path, filename))
+            images[i] = img
+        images = np.array(images)
+        return images
+        
