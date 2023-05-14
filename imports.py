@@ -42,7 +42,7 @@ from scipy import ndimage as ndi
 from pathlib import Path
 from PIL import Image, ImageOps
 from pyefd import elliptic_fourier_descriptors
-from multiprocessing import Pool
+# from multiprocessing import Pool
 from colorama import Fore, Back, Style
 from skfuzzy.cluster import cmeans
 

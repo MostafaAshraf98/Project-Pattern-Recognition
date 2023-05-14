@@ -69,10 +69,10 @@ class IlluminationPreprocessing:
       return saturation_channel_masked, mask
 
 
-  def process_images_multiprocess(self, images):
-      with Pool() as p:
-          results = p.map(self.process_image, images)
-      return np.stack(results, axis=0)
+#   def process_images_multiprocess(self, images):
+#       with Pool() as p:
+#           results = p.map(self.process_image, images)
+#       return np.stack(results, axis=0)
 
   def process_images_loops(self, images):
       results = []
