@@ -38,6 +38,6 @@ class FeatureSelector:
         
     def test_pca(self,img, pca):
         image_vector = img.flatten()
-        pca_features = pca.transform(image_vector)
+        pca_features = pca.transform(np.array([image_vector]))
         return pca_features
         
