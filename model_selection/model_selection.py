@@ -93,7 +93,8 @@ class ModelSelection:
         loss, test_accuracy = model.evaluate(self.x_val, y_onehot_val, verbose=0)
         print(f"Test accuracy: {test_accuracy}")
         print(f"Test loss: {loss}")
-        self.save_model(model, "ann.pkl")
+        
+        model.save("ann.h5")
 
         return model, pred_train, pred_val
 

@@ -35,3 +35,9 @@ class FeatureSelector:
             pickle.dump(pca, open("pca.pkl", "wb"))
             
             return pca_features
+        
+    def test_pca(self,img, pca):
+        image_vector = img.flatten()
+        pca_features = pca.transform(image_vector)
+        return pca_features
+        
