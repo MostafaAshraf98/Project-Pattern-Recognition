@@ -14,7 +14,7 @@ pathlib
 Pillow
 pyefd
 colorama
-skfuzzy
+scikit-fuzzy
 matplotlib
 numpy
 tqdm

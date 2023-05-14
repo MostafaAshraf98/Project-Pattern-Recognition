@@ -8,3 +8,4 @@ results.txt
 time.txt
 *.h5
 *.npy
+.venv
