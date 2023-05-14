@@ -1,6 +1,7 @@
-from skimage.filters import threshold_otsu, threshold_local
-from skimage.color import rgb2gray
-import numpy as np
+import sys
+sys.path.append('../')
+
+from imports import *
 
 class ThresholdSegmentation:
     def init(self, method="Global", block_size=35, thresh_method="otsu", n_thresholds=3):

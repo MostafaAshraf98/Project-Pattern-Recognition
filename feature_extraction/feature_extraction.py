@@ -1,11 +1,7 @@
-from skimage.feature import hog, local_binary_pattern
-import cv2
-import numpy as np
-from skimage.color import rgb2gray
-from skimage.feature import daisy
-import matplotlib.pyplot as plt
-from scipy.fftpack import fft
-from pyefd import elliptic_fourier_descriptors
+import sys
+sys.path.append('../')
+
+from imports import *
 
 
 """

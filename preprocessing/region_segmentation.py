@@ -1,8 +1,7 @@
-import numpy as np
-from skimage.segmentation import felzenszwalb, slic, quickshift
-from skimage.color import rgb2gray
-from skimage.filters import sobel
-from scipy import ndimage as ndi
+import sys
+sys.path.append('../')
+
+from imports import *
 
 class RegionBasedSegmentation:
     def __init__(self, method="region_growing", **kwargs):

@@ -1,14 +1,7 @@
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.utils import to_categorical
-import hmmlearn.hmm as hmm
-from sklearn.ensemble import AdaBoostClassifier
-from keras import regularizers
-import pickle
+import sys
+sys.path.append('../')
+
+from imports import *
 
 
 class ModelSelection:

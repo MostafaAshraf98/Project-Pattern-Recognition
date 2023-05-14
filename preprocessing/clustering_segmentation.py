@@ -1,17 +1,7 @@
-from skimage.color import rgb2gray
-from skimage.filters import threshold_otsu, gaussian
-from skimage.segmentation import slic
-from skimage.segmentation import mark_boundaries
-from skimage.util import img_as_float
-from skimage.transform import resize
-from skimage.measure import regionprops
-from skimage.color import label2rgb
-from sklearn.cluster import KMeans
-from skimage.morphology import closing, disk, skeletonize
-from skimage.util import invert
-from skimage.segmentation import clear_border
-from skfuzzy.cluster import cmeans
-import numpy as np
+import sys
+sys.path.append('../')
+
+from imports import *
 
 
 class ClusteringSegmentation:

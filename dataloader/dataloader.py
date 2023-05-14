@@ -1,13 +1,7 @@
-from pathlib import Path
-from sklearn.model_selection import train_test_split
-import numpy as np
-from PIL import Image
-from PIL import ImageOps
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from illumination_preprocessing.illumination_preprocessing import IlluminationPreprocessing
-import tqdm
-import os
-import cv2
+import sys
+sys.path.append('../')
+
+from imports import *
 
 WIDTH = 320
 HEIGHT = 320
@@ -18,8 +12,6 @@ class DataLoader:
         self.path = path
         self.genders = ["men", "Women"]
         self.desired_size = (WIDTH, HEIGHT)
-        self.illumination_processing = IlluminationPreprocessing()
-
         
     def load_data(self, data_augmentation=False):
         try:

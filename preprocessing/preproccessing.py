@@ -1,6 +1,7 @@
-from skimage import exposure, filters
-import numpy as np
-from PIL import ImageOps , Image
+import sys
+sys.path.append('../')
+
+from imports import *
 
 class ImagePreprocessor:
     def __init__(self, method="HE"):

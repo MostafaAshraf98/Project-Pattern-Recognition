@@ -1,7 +1,7 @@
-from skimage.filters import sobel, prewitt, roberts, laplace, gaussian
-from skimage.feature import canny
-from skimage.color import rgb2gray
-import numpy as np
+import sys
+sys.path.append('../')
+
+from imports import *
 
 class EdgeDetection:
     def __init__(self, method="sobel"):
